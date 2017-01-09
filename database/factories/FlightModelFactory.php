@@ -1,5 +1,7 @@
 <?php
 
+use App\Customer;
+
 $factory->define(App\Airport::class, function (Faker\Generator $faker) {
     return [
         'iataCode' => str_random(3),
