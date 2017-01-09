@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Airport;
+use App\Customer;
 use Illuminate\Database\Eloquent\Model;
 
 class Flight extends Model
