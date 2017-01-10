@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\middleware;
 use App\Services\v1\FlightsService;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -14,6 +15,8 @@ class FlightController extends Controller
     public function __construct(FlightsService $service)
     {
         $this->flights = $service;
+
+        $this->middleware('auth.api', ['only' => ['store', 'update', 'destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -76,7 +79,7 @@ class FlightController extends Controller
     public function update(Request $request, $id)
     {
         $this->flights->validate($request->all());
-        
+
         try {
             $flight = $this->flights->updateFlight($request, $id);
 
