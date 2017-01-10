@@ -30,6 +30,31 @@ class FlightsService {
     return $this->filterFlights($flights , $withKeys);
   }
 
+  public function createFlight($req)
+  {
+    $arrivalAirport = $req->input('arrival.iataCode');
+    $departureAirport = $req->input('departure.iataCode');
+
+    $airports = Airport::whereIn('iataCode', ['arrivalAirport', 'departureAirport'])->get(); 
+    $codes = []; 
+
+    foreach ($airports as $port) {
+      $codes[$port->iataCode] = $port->id;
+    }
+
+    $flight = new Flight();
+    $flight->flightNumber = $req->input('flightNumber');
+    $flight->status = $req->input('status');
+    $flight->arrivalAirport_id = $codes[$arrivalAirport];
+    $flight->arrivalDateTime = $req->input('arrival.datetime');
+    $flight->depatureAirport_id = $codes[$departureAirport];
+    $flight->depatureDateTime = $req->input('departure.datetime');
+
+    $flight->save();
+
+    return $this->filterFlights([$flight]);
+  }
+
   protected function filterFlights($flights, $keys = [])
   {
     $data = [];
